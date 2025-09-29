@@ -1,15 +1,10 @@
 > 📌 **NOTE TO REVIEWERS**
 >
-> This repository contains the **official GENESISFIELDMCMC v1.1.4** release, under simultaneous review at:
+> This repository contains the **official GENESISFIELDMCMC v2.0.0** release, under review at:
 > - 📝 *Classical and Quantum Gravity* (CQG) — Theory + Results Paper
-> - 🧪 *Journal of Open Source Software* (JOSS) — Software Pipeline Submission
->
 > 🔗 All figures, tables, and statistical results in the CQG paper are generated from this codebase.  
-> 🔁 All JOSS functionality and documentation reflects this version.  
-> 📄 Final CQG Submission PDF: [📥 Download `Genesis_Field_CQG_Submission_July23.pdf`](https://github.com/genesisfield/genesisfieldmcmc/raw/main/paper%20CQG/Genesis_Field_CQG_Submission_July23.pdf)
-> 📝 Research Notes of the AAS (RNAAS) — Empirical Suppression Result (submitted July 28, 2025)
 > 📎 Zenodo DOI: [10.5281/zenodo.16251890](https://doi.org/10.5281/zenodo.16251890)  
-> 🏷️ Version: `GENESISFIELDMCMC v1.1.4` (Released July 21, 2025)
+> 🏷️ Version: `GENESISFIELDMCMC v2.0.0` (Released September 29, 2025)
 
 # GENESISFIELDMCMC: Ripple-Modulated Cosmological Inference in the Genesis Field Framework
 [![GitHub stars](https://img.shields.io/github/stars/genesisfield/genesisfieldmcmc?style=social)](https://github.com/genesisfield/genesisfieldmcmc/stargazers)
@@ -21,12 +16,13 @@ GENESISFIELDMCMC is a full-sequence cosmological inference pipeline for ripple-m
 
 The pipeline is falsifiable, empirical, and fully reproducible. All stages pass outputs (M values, JSON summaries, residuals) forward. Deduplication and fixed seeds ensure reproducibility.
 
-## 🗂 outputs/
+## 🗂 outputs examples/
 
 - `joint_model_comparison_summary.json`  
-- `joint_corner.png`  
+- `joint_corner.pdf`  
 - `joint_lcdm_grid_fit_summary.json`  
 - `joint_lcdm_grid_fit_chi2.png`
+- `joint_diagnostics.json`
 
 These are the canonical output files referenced in the RNAAS notes and the CQG manuscript for reviwer convenience. All values and figures can be regenerated using the provided pipeline and configuration files.
 
@@ -98,12 +94,19 @@ Step 13 — Sweep Parameter Space (Post-Fit Exploration)
 Run: python examples/sweep_fqmt_parameters.py  
 Sweeps ripple parameters ε, ω, γ, and φ over physical ranges. Produces heatmaps and chi² diagnostics to visualize ripple structure.
 
+Step 14 - Cosmology Parameters
+Run: Fits the core cosmological parameters (H₀, Ωₘ) under tight (SN-calibrated) and relaxed priors, with ripple parameters ε, ω, γ, and φ free to vary. Produces posterior tables, corner plots, and ΛCDM baseline comparisons showing how the Genesis Field reduces to ΛCDM when ε → 0.
+
+Step 15 – Predictive WAIC & Phase-Space Analysis
+
+Run: Computes WAIC for the equal-DOF two-parameter H(z) comparison (ripple: ε,H₀ free; shape fixed) and generates the phase-space portrait (stable-focus spiral) used in Appendix E. Ensures the evidential claim is based on matched parameters and adds a predictive cross-check consistent with AIC/BIC.
+
 Ripple Model:
 H(z) = H₀ × [1 + ε cos(ω ln(1+z) + φ) × exp(−γ ln(1+z))]  
 where ε = amplitude, ω = frequency, φ = phase offset, γ = damping, and H₀ = Hubble constant
 
 Directory Overview:
-examples/ — Pipeline scripts  
+pipeline/ — Pipeline scripts  
 mcalib_ripple/ — M-calibration logic  
 fqmtmcmc/ — Ripple models and MCMC engines  
 data/ — Pantheon+SH0ES SN and H(z) inputs  
@@ -124,14 +127,14 @@ Posteriors & Chains:
 - *_log_prob_mcmc.npy  
 
 Corner Plots:
-- sn_corner_mcmc_pantheon.png  
-- hz_corner_tight.png / relaxed.png  
-- joint_corner.png  
+- sn_corner_mcmc_pantheon.pdf  
+- hz_corner_tight.pdf / relaxed.pdf  
+- joint_corner.pdf 
 
 Residuals & Comparisons:
 - sn_residuals_pantheon.png  
 - ripple_vs_lcdm_2param.png  
-- ripple_vs_lcdm_hz_2param_hero.png  
+- ripple_vs_lcdm_hz_2param_hero.pdf  
 - ripple_param_comparison_barplot.png  
 - sweep_epsilon_grid_heatmap.png  
 
@@ -146,6 +149,16 @@ Model Summaries:
 - hz_lcdm_grid_relaxed_fit_chi2.png / summary.json 
 - hz_lcdm_grid_tight_fit_chi2.png / summary.json   
 - joint_lcdm_grid_fit_chi2.png / summary.json  
+
+Cosmology Parameters:
+- derived_diagnostics_hz_relaxed.py
+- derived_diagnostics_hz_tight.py
+- derived_diagnostics_joint.py
+- derived_diagnostics_sn.py
+
+Misc:
+- ripple_vs_lcdm_2param_waic.py
+- phase_portrait.py
 
 Install:
 git clone https://github.com/genesisfield/genesisfieldmcmc.git  
